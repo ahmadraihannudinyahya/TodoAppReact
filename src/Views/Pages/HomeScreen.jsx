@@ -21,7 +21,7 @@ export const HomeScreen = () => {
                 <GlassCard>
                     <div className="flex flex-row items-center justify-between">
                         <div>
-                            <h1 className="text-2xl font-bold text-theme-onsurface">Hi {auth.user.profile?.name}</h1>
+                            <h1 className="text-2xl font-bold text-theme-onsurface">Hi {auth?.user?.profile?.name}</h1>
                             <p className="text-lg font-light text-theme-onsurface">Small Steps, Big Progress</p>
                         </div>
                         <button
