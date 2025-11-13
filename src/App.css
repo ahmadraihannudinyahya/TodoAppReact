@@ -1,0 +1,21 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+
+/* Hide clock icon in Chrome, Edge, Safari */
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Optional: remove extra space for icon */
+input[type="time"] {
+  appearance: textfield;
+  -moz-appearance: textfield; /* Firefox */
+}
