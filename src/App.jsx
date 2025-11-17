@@ -1,23 +1,13 @@
-import { useEffect } from 'react';
 import './App.css'
-import { HomeScreen } from './Views/Pages/HomeScreen'
-import { MonthlyScreen } from './Views/Pages/MonthlyScreen'
 import { Settings } from './Views/Pages/Settings'
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { initDB } from './infrastructure/indexedDb/config';
 import { ProjectPresenter } from './Views/Presenter/ProjectPresenter';
 import { HomePresenter } from './Views/Presenter/HomePresenter';
 import { MonthlyPresenter } from './Views/Presenter/MonthlyPresenter';
 
 function App() {
-    useEffect(() => {
-        const load = async () => {
-            await initDB();
-        };
 
-        load();
-    }, []);
     return (
         <div className="min-h-screen bg-fixed bg-cover bg-center
                     bg-[url('/assets/images/bg_light.png')] 
