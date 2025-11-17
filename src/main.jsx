@@ -4,6 +4,13 @@ import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from 'react-oidc-context';
 
+import { registerSW } from 'virtual:pwa-register'
+
+registerSW({
+  onNeedRefresh() {},
+  onOfflineReady() {},
+})
+
 const oidcConfig = {
   authority: 'https://auth.projectbase.space/connect', 
   client_id: 'client-app',

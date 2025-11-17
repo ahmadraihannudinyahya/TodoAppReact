@@ -1,16 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GlassCard } from "./GlassCard"
-import { DocumentPlusIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { DocumentPlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { AutoResizeTextarea } from "./AutoResizeTextarea";
 
-export const ProjectDetail = () => {
+export const ProjectDetail = ({
+    project = null,
+    onProjectSave = () => { },
+    onProjectDelete = () => { }, 
+    onClickCreateTask = () => { }, 
+}) => {
     const [isEdit, setIsEdit] = useState(false)
+    const [name, setName] = useState('')
+    const [descriptions, setDescriptions] = useState('')
+
+    const resetState = () => {
+        if (project) {
+            setName(project.name)
+            setDescriptions(project.descriptions)
+        } else {
+            setName('')
+            setDescriptions('')
+        }
+    }
+
+    useEffect(() => {
+        if (!project) {
+            setIsEdit(true)
+        } else {
+            setName(project.name)
+            setDescriptions(project.descriptions)
+            setIsEdit(false)
+        }
+    }, [project])
     return (
         <GlassCard>
             <div className="flex flex-col gap-2">
-                <input
+                <AutoResizeTextarea
                     className={`text-2xl font-bold text-theme-onsurface p-2 rounded-xl ${isEdit ? 'border-2 border-[#B13BFF]/50' : ''} transition duration-600 ease-in-out`}
-                    value={"Todo List"}
+                    value={name}
+                    onChange={e => {
+                        setName(e.target.value)
+                    }}
+                    placeholder="Project Name"
                     disabled={!isEdit}
                 />
                 <div className="flex flex-row justify-between w-full">
@@ -18,7 +49,7 @@ export const ProjectDetail = () => {
                         Due Date
                     </p>
                     <p className="text-medium font-medium text-theme-onsurface">
-                        20 - Oktober - 2024
+                        {project ? project.dueDate : '-'}
                     </p>
                 </div>
                 <h3
@@ -27,7 +58,11 @@ export const ProjectDetail = () => {
                 <AutoResizeTextarea
                     className={`text-medium font-medium text-theme-onsurface p-2 rounded-xl ${isEdit ? 'border-2 border-[#B13BFF]/50' : ''} transition duration-600 ease-in-out`}
                     disabled={!isEdit}
-                    value={'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quae voluptas, nobis, saepe magni omnis asperiores maiores, obcaecati vitae minima impedit excepturi architecto quis aliquam nulla doloremque quam provident voluptatum totam?'}
+                    value={descriptions}
+                    onChange={e => {
+                        setDescriptions(e.target.value)
+                    }}
+                    placeholder="Project Descriptions"
                 />
                 <div className="flex flex-row justify-end w-full">
                     {isEdit ? (
@@ -35,7 +70,14 @@ export const ProjectDetail = () => {
                             <button
                                 aria-label="save"
                                 className="p-2 rounded-full bg-green-500 hover:scale-105 transition-transform duration-200"
-                                onClick={() => setIsEdit(false)}
+                                onClick={() => {
+                                    onProjectSave({
+                                        id: project?.id, 
+                                        name: name,
+                                        descriptions: descriptions
+                                    })
+                                    setIsEdit(false)
+                                }}
                             >
                                 Save
                             </button>
@@ -43,7 +85,10 @@ export const ProjectDetail = () => {
                             <button
                                 aria-label="cancel"
                                 className="p-2 rounded-full bg-red-500 hover:scale-105 transition-transform duration-200"
-                                onClick={() => setIsEdit(false)}
+                                onClick={() => {
+                                    setIsEdit(false)
+                                    resetState()
+                                }}
                             >
                                 Cancel
                             </button>
@@ -52,18 +97,31 @@ export const ProjectDetail = () => {
                         <div className="flex flex-row justify-end gap-4 w-full transition-all duration-600 ease-in-out opacity-100">
                             <button
                                 aria-label="edit"
-                                className="p-2 rounded-full bg-green-500 hover:scale-105 transition-transform duration-200"
+                                className="p-2 rounded-full bg-green-500 onClick"
                                 onClick={() => setIsEdit(true)}
                             >
                                 <PencilIcon className="w-6 h-6 text-theme-onsurface" />
                             </button>
-                            <button
-                                aria-label="create task"
-                                className="p-2 rounded-full bg-green-500 hover:scale-105 transition-transform duration-200"
-                                // onClick={() => setIsEdit(true)}
-                            >
-                                <DocumentPlusIcon className="w-6 h-6 text-theme-onsurface" />
-                            </button>
+
+                            {project &&
+                                <>
+                                    <button
+                                        aria-label="create task"
+                                        className="p-2 rounded-full bg-green-500 onClick"
+                                        onClick={onClickCreateTask}
+                                    >
+                                        <DocumentPlusIcon className="w-6 h-6 text-theme-onsurface" />
+                                    </button>
+                                    <button
+                                        aria-label="create task"
+                                        className="p-2 rounded-full bg-red-500 onClick"
+                                        onClick={() => onProjectDelete(project)}
+                                    >
+                                        <TrashIcon className="w-6 h-6 text-theme-onsurface" />
+                                    </button>
+                                </>
+                            }
+
                         </div>
                     )}
                 </div>

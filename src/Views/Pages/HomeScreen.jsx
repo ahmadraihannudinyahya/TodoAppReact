@@ -10,8 +10,12 @@ import { useState } from "react";
 import { TaskDetail } from "../Components/TaskDetail";
 import { useAuth } from "react-oidc-context";
 
-export const HomeScreen = () => {
+export const HomeScreen = ({
+    projectList = [],
+    taskList = [],
+}) => {
     const [isModalOpen, setModalOpen] = useState(false);
+    const [task, setTask] = useState(null)
     const navigate = useNavigate();
     const auth = useAuth();
 
@@ -26,7 +30,7 @@ export const HomeScreen = () => {
                         </div>
                         <button
                             aria-label="Settings"
-                            className="p-2 rounded-full bg-white/20 dark:bg-slate-700 transition"
+                            className="p-2 rounded-full bg-white/20 dark:bg-slate-700 onClick transition"
                             onClick={() => navigate('/settings')}
                         >
                             <Cog6ToothIcon className="w-6 h-6 text-theme-onsurface" />
@@ -54,33 +58,39 @@ export const HomeScreen = () => {
                     onClick={() => navigate('/monthly')}
                 />
             </MasonryLayout>
+            {projectList.length && <h1 className="text-2xl font-bold text-theme-onbackground">Manage Projects</h1>}
 
-
-            <h1 className="text-2xl font-bold text-theme-onbackground">Manage Projects</h1>
             <MasonryLayout>
-
-                <ProjectItem
-                    onClick={() => navigate('/project')}
-                />
-                <ProjectItem />
-                <ProjectItem />
+                {projectList.map(project =>
+                    <ProjectItem
+                        project={project}
+                        onClick={() => navigate(`/project/${project.id}`)}
+                    />
+                )}
             </MasonryLayout>
 
-            <h1 className="text-2xl font-bold text-theme-onbackground">High Priority Task</h1>
+            {taskList.length && <h1 className="text-2xl font-bold text-theme-onbackground">High Priority Task</h1>}
+
+
             <MasonryLayout>
-                <TaskItem
-                    onClick={() => setModalOpen(true)}
-                />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
+
+                {
+                    taskList.map(task =>
+                        <TaskItem
+                            task={task}
+                            onClick={() => {
+                                setTask(task)
+                                setModalOpen(true)
+                            }}
+                        />
+                    )
+                }
             </MasonryLayout>
 
             <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-                <TaskDetail />
+                <TaskDetail 
+                    task={task}
+                />
             </Modal>
         </div>
     )

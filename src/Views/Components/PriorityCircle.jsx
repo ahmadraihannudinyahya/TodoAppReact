@@ -1,4 +1,9 @@
-export const PriorityCircle = ({ priority = 'low', size = 24, selected = false }) => {
+export const PriorityCircle = ({
+    priority = 'low', 
+    size = 24, 
+    selected = false, 
+    onClick = () => {}, 
+}) => {
     let color = ''
 
     switch (priority.toLowerCase()) {
@@ -15,7 +20,8 @@ export const PriorityCircle = ({ priority = 'low', size = 24, selected = false }
 
     return (
         <div
-            className={`flex items-center justify-center rounded-full border-2`}
+            onClick = {onClick}
+            className={`flex items-center justify-center rounded-full border-2 onClick`}
             style={{
                 width: size,
                 height: size,

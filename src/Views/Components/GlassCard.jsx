@@ -5,7 +5,7 @@ export const GlassCard = ({
 }) => {
   return (
     <div
-      className={`surface ${onClick ? 'hover:bg-gray-400 dark:hover:bg-slate-700' : ''}  transition ${className}`}
+      className={`surface ${onClick ? 'onClick' : ''}  transition ${className}`}
       onClick={onClick}
     >
       {children}

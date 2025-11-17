@@ -23,4 +23,8 @@
     @apply bg-[#F5F1DC]/70 border-black/20;
     @apply dark:bg-[#090040]/30 dark:border-white/10;
   }
+
+  .onClick {
+    @apply hover:scale-105 transition-transform duration-200 cursor-pointer
+  }
 }

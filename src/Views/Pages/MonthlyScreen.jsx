@@ -4,7 +4,11 @@ import { DatePicker } from '../Components/DatePicker';
 import { TaskItem } from '../Components/TaskItem';
 import { MasonryLayout } from '../Components/MasonryLayout';
 
-export const MonthlyScreen = () => {
+export const MonthlyScreen = ({
+    taskList = [],
+    setDate,
+    date, 
+}) => {
     const navigate = useNavigate();
     return (
         <div className="flex flex-col gap-2 bg-center p-5 h-full">
@@ -19,14 +23,12 @@ export const MonthlyScreen = () => {
                 <h1 className="text-2xl font-bold text-theme-onbackground ml-2">Activities</h1>
             </div>
             <MasonryLayout>
-                <DatePicker />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
+                <DatePicker value={date} onChange={setDate} />
+                {taskList.map(task =>
+                    <TaskItem
+                        task={task}
+                    />
+                )}
             </MasonryLayout>
         </div>
     )

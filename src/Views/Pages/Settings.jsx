@@ -14,32 +14,6 @@ export const Settings = () => {
         name: '',
         email: ''
     })
-
-    // switch (auth.activeNavigator) {
-    //     case "signinSilent":
-    //         return <div>Signing you in...</div>;
-    //     case "signoutRedirect":
-    //         return <div>Signing you out...</div>;
-    // }
-
-    // if (auth.isLoading) {
-    //     return <div>Loading...</div>;
-    // }
-
-    // if (auth.error) {
-    //     return <div>Oops... {auth.error.kind} caused {auth.error.message}</div>;
-    // }
-
-
-    // if (auth.user) {
-    //     const idToken = auth.user.id_token;
-    //     const decoded = jwtDecode(idToken);
-    //     setUster({
-    //         name: decoded.email || '',
-    //         email: decoded.email || '', 
-    //     })
-    // }
-
     useEffect(() => {
         if (auth.user) {
             const idToken = auth.user.id_token;
@@ -50,27 +24,6 @@ export const Settings = () => {
             })
         }
     }, [auth.isAuthenticated])
-
-    // if (auth.isAuthenticated) {
-    //     return (
-    //         <div>
-    //             Hello {auth.user?.profile.sub}{" "}
-    //             <button className='text-white px-4 sm:px-8 py-2 sm:py-3 bg-sky-700' onClick={() => {
-    //                 auth.removeUser()
-    //                 auth.signoutRedirect({
-    //                     post_logout_redirect_uri: 'http://localhost:4000'
-    //                 })
-    //             }}>Log out</button>
-    //         </div>
-    //     );
-    // }
-
-    // return (
-    //     <button
-    //         className='text-white px-4 sm:px-8 py-2 sm:py-3 bg-sky-700'
-    //         onClick={() => auth.signinRedirect()}
-    //     >Log in</button>
-    // );
 
     return (
         <div className="flex flex-col gap-2 bg-center p-5">
@@ -102,7 +55,7 @@ export const Settings = () => {
                                     onClick={() => {
                                         auth.removeUser()
                                         auth.signoutRedirect({
-                                            post_logout_redirect_uri: 'http://localhost:4000/settings'
+                                            post_logout_redirect_uri: `${window.location.origin}/settings`
                                         })
                                     }}>Log out</button>
                             </>

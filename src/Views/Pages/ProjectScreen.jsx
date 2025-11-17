@@ -3,15 +3,27 @@ import { TaskItem } from '../Components/TaskItem';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { ProjectDetail } from '../Components/ProjectDetail';
 import { MasonryLayout } from '../Components/MasonryLayout';
+import { useState } from 'react';
+import { Modal } from '../Components/ModalOverlay';
+import { TaskDetail } from '../Components/TaskDetail';
 
-export const ProjectScreen = () => {
+export const ProjectScreen = ({
+    project = null,
+    tasks = [],
+    onProjectSave = () => { },
+    onProjectDelete = () => { },
+    onSaveTask = () => { },
+    onDeleteTask = () => { },
+}) => {
     const navigate = useNavigate();
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [task, setTask] = useState(null)
     return (
         <div className="flex flex-col gap-2 bg-center p-5">
             <div className='flex flex-row items-center'>
                 <button
                     onClick={() => navigate(-1)}
-                    className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition"
+                    className="p-2 rounded-full onClick"
                     aria-label="Go Back"
                 >
                     <ArrowLeftIcon className="w-6 h-6 text-theme-onbackground" />
@@ -19,15 +31,40 @@ export const ProjectScreen = () => {
                 <h1 className="text-2xl font-bold text-theme-onbackground ml-2">Project</h1>
             </div>
             <MasonryLayout>
-                <ProjectDetail />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
-                <TaskItem />
+                <ProjectDetail
+                    project={project}
+                    onProjectSave={onProjectSave}
+                    onProjectDelete={onProjectDelete}
+                    onClickCreateTask={() => setModalOpen(true)}
+                />
+                {
+                    tasks.map(task =>
+                        <TaskItem
+                            task={task}
+                            onClick={() => {
+                                setTask(task)
+                                setModalOpen(true)
+                            }}
+                        />
+                    )
+                }
             </MasonryLayout>
+            <Modal isOpen={isModalOpen} onClose={() => {
+                setModalOpen(false)
+                setTask(null)
+            }}>
+                <TaskDetail
+                    task={task}
+                    onSaveTask={(task) => {
+                        onSaveTask(task)
+                        setModalOpen(false)
+                    }}
+                    onDeleteTask={(task) => {
+                        onDeleteTask(task)
+                        setModalOpen(false)
+                    }}
+                />
+            </Modal>
         </div>
 
     )
