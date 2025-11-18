@@ -94,6 +94,7 @@ export async function deleteProject(projectId) {
 // ---------------- TASK CRUD ----------------
 export async function addTask(task) {
     task.id = crypto.randomUUID();
+    task.isDone = false;
     await openDB();
     return new Promise((resolve, reject) => {
         const store = getStore(STORE_TASKS, "readwrite");
@@ -157,9 +158,41 @@ export async function updateTask(task) {
     await openDB();
     return new Promise((resolve, reject) => {
         const store = getStore(STORE_TASKS, "readwrite");
-        const req = store.put(task);
-        req.onsuccess = () => resolve();
-        req.onerror = () => reject(req.error);
+        const getReq = store.get(task.id);
+        getReq.onsuccess = () => {
+            const existing = getReq.result;
+
+            if (!existing) {
+                reject(new Error("Task not found"));
+                return;
+            }
+            const updated = { ...existing, ...task };
+            const putReq = store.put(updated);
+            putReq.onsuccess = () => resolve(updated);
+            putReq.onerror = () => reject(putReq.error);
+        };
+
+    });
+}
+
+export async function toogleTaskDone(taskId) {
+    await openDB();
+    return new Promise((resolve, reject) => {
+        const store = getStore(STORE_TASKS, "readwrite");
+        const getReq = store.get(taskId);
+        getReq.onsuccess = () => {
+            const existing = getReq.result;
+
+            if (!existing) {
+                reject(new Error("Task not found"));
+                return;
+            }
+            const updated = { ...existing, isDone: !existing.isDone };
+            const putReq = store.put(updated);
+            putReq.onsuccess = () => resolve(updated);
+            putReq.onerror = () => reject(putReq.error);
+        };
+
     });
 }
 

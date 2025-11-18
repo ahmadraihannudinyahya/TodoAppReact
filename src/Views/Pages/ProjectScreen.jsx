@@ -10,10 +10,13 @@ import { TaskDetail } from '../Components/TaskDetail';
 export const ProjectScreen = ({
     project = null,
     tasks = [],
+    progress = 0,
+    lastDue = '-',
     onProjectSave = () => { },
     onProjectDelete = () => { },
     onSaveTask = () => { },
     onDeleteTask = () => { },
+    toogleTaskDone = () => { },
 }) => {
     const navigate = useNavigate();
     const [isModalOpen, setModalOpen] = useState(false);
@@ -36,6 +39,8 @@ export const ProjectScreen = ({
                     onProjectSave={onProjectSave}
                     onProjectDelete={onProjectDelete}
                     onClickCreateTask={() => setModalOpen(true)}
+                    progress={progress}
+                    lastDue={lastDue}
                 />
                 {
                     tasks.map(task =>
@@ -45,6 +50,7 @@ export const ProjectScreen = ({
                                 setTask(task)
                                 setModalOpen(true)
                             }}
+                            toogleTaskDone={toogleTaskDone}
                         />
                     )
                 }

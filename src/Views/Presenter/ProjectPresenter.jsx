@@ -8,6 +8,7 @@ import {
     getTasksByProject,
     updateTask,
     deleteTask as idbDeleteTask,
+    toogleTaskDone as idbToogleTaskDone,
 } from "../../infrastructure/repositories/idb";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -15,12 +16,28 @@ export const ProjectPresenter = () => {
     const navigate = useNavigate()
     const { id } = useParams();
     const [project, setProject] = useState(null);
-    const [tasks, setTasks] = useState([])
-
+    const [tasks, setTasks] = useState([]);
+    const [lastDue, setLastDue] = useState('');
+    const [progress, setProgress] = useState(0)
 
     const loadTask = useCallback(async (id) => {
         const tasks = await getTasksByProject(id);
         setTasks(tasks);
+        if (tasks.length > 0) {
+            const sorted = [...tasks].sort((a, b) => new Date(b.due) - new Date(a.due));
+            const lastTask = sorted[0];
+            setLastDue(new Date(lastTask.due).toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            }));
+            const taskDone = [...tasks].filter(task => task.isDone);
+            const progress = taskDone.length / tasks.length * 100
+            setProgress(progress)
+        } else {
+            setLastDue('-');
+            setProgress(0)
+        }
     }, [setTasks])
 
     const loadData = useCallback(async (id) => {
@@ -69,9 +86,16 @@ export const ProjectPresenter = () => {
         loadTask(project.id)
     }
 
+    const toogleTaskDone = async (taskId) => {
+        await idbToogleTaskDone(taskId)
+        await loadTask(project.id)
+    }
+
     return (
         <ProjectScreen
             project={project}
+            lastDue={lastDue}
+            progress={progress}
             onProjectSave={project => {
                 saveProject(project)
             }}
@@ -85,6 +109,7 @@ export const ProjectPresenter = () => {
                 deleteTask(task)
             }}
             tasks={tasks}
+            toogleTaskDone={toogleTaskDone}
         />
     )
 }

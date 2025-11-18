@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { GlassCard } from "./GlassCard"
 import { DocumentPlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { AutoResizeTextarea } from "./AutoResizeTextarea";
+import { HorizontalProgress } from "./HorizontalProgress";
 
 export const ProjectDetail = ({
     project = null,
     onProjectSave = () => { },
-    onProjectDelete = () => { }, 
-    onClickCreateTask = () => { }, 
+    onProjectDelete = () => { },
+    onClickCreateTask = () => { },
+    progress = 0, 
+    lastDue = '-'
 }) => {
     const [isEdit, setIsEdit] = useState(false)
     const [name, setName] = useState('')
@@ -49,20 +52,23 @@ export const ProjectDetail = ({
                         Due Date
                     </p>
                     <p className="text-medium font-medium text-theme-onsurface">
-                        {project ? project.dueDate : '-'}
+                        {lastDue}
                     </p>
                 </div>
                 <h3
                     className="text-bold font-medium text-theme-onsurface"
                 >Descriptions</h3>
                 <AutoResizeTextarea
-                    className={`text-medium font-medium text-theme-onsurface p-2 rounded-xl ${isEdit ? 'border-2 border-[#B13BFF]/50' : ''} transition duration-600 ease-in-out`}
+                    className={`text-medium font-medium text-theme-onsurface p-2 rounded-xl mb-4 ${isEdit ? 'border-2 border-[#B13BFF]/50' : ''} transition duration-600 ease-in-out`}
                     disabled={!isEdit}
                     value={descriptions}
                     onChange={e => {
                         setDescriptions(e.target.value)
                     }}
                     placeholder="Project Descriptions"
+                />
+                <HorizontalProgress
+                    progress={progress}
                 />
                 <div className="flex flex-row justify-end w-full">
                     {isEdit ? (
@@ -72,7 +78,7 @@ export const ProjectDetail = ({
                                 className="p-2 rounded-full bg-green-500 hover:scale-105 transition-transform duration-200"
                                 onClick={() => {
                                     onProjectSave({
-                                        id: project?.id, 
+                                        id: project?.id,
                                         name: name,
                                         descriptions: descriptions
                                     })

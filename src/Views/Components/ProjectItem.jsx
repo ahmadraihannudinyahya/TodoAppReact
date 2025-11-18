@@ -9,11 +9,11 @@ export const ProjectItem = ({
         <GlassCard
             onClick={onClick}
         >
-            <div className='flex flex-col'>
+            <div className='flex flex-col gap-2'>
                 <h3 className="text-xl font-semibold text-theme-onsurface">{project.name}</h3>
-                <p className="text-lg font-light text-theme-onsurface">{project.descriptions}</p>
+                <p className="text-lg font-light text-theme-onsurface mb-4">{project.descriptions}</p>
                 <HorizontalProgress
-                    progress={20}
+                    progress={project.progress}
                 />
             </div>
         </GlassCard>

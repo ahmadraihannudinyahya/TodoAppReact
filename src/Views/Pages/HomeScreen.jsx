@@ -13,6 +13,10 @@ import { useAuth } from "react-oidc-context";
 export const HomeScreen = ({
     projectList = [],
     taskList = [],
+    toogleTaskDone = () => { }, 
+    dailyTask=0, 
+    dailyTaskDone=0
+
 }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [task, setTask] = useState(null)
@@ -53,8 +57,8 @@ export const HomeScreen = ({
                     </div>
                 </GlassCard>
                 <DailyActivities
-                    totalTask={20}
-                    taskDone={14}
+                    totalTask={dailyTask}
+                    taskDone={dailyTaskDone}
                     onClick={() => navigate('/monthly')}
                 />
             </MasonryLayout>
@@ -82,13 +86,14 @@ export const HomeScreen = ({
                                 setTask(task)
                                 setModalOpen(true)
                             }}
+                            toogleTaskDone={toogleTaskDone}
                         />
                     )
                 }
             </MasonryLayout>
 
             <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-                <TaskDetail 
+                <TaskDetail
                     task={task}
                 />
             </Modal>

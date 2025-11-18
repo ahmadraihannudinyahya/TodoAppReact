@@ -4,9 +4,9 @@ import "react-day-picker/style.css";
 import { GlassCard } from "./GlassCard";
 
 export const DatePicker = ({
-    className = '', 
-    onChange, 
-    value, 
+    className = '',
+    onChange,
+    value,
 }) => {
     const defaultClassNames = getDefaultClassNames();
     return (
@@ -20,6 +20,8 @@ export const DatePicker = ({
                     selected={value}
                     onSelect={onChange}
                     showOutsideDays={true}
+                    startMonth={new Date(new Date().getFullYear() - 2, 0)} 
+                    endMonth={new Date(new Date().getFullYear() + 3, 0)} 
                     modifiersClassNames={{
                         selected: "bg-[#B13BFF] text-white rounded-full",
                         today: "text-[#B13BFF] font-bold",

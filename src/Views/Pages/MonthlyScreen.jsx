@@ -3,13 +3,22 @@ import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { DatePicker } from '../Components/DatePicker';
 import { TaskItem } from '../Components/TaskItem';
 import { MasonryLayout } from '../Components/MasonryLayout';
+import { GlassCard } from '../Components/GlassCard';
+import { CircularProgress } from '../Components/CircularProgress';
+import { useState } from 'react';
+import { Modal } from '../Components/ModalOverlay';
+import { TaskDetail } from '../Components/TaskDetail';
 
 export const MonthlyScreen = ({
     taskList = [],
     setDate,
-    date, 
+    date,
+    progress = 0,
+    toogleTaskDone = () => { }
 }) => {
     const navigate = useNavigate();
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [task, setTask] = useState(null)
     return (
         <div className="flex flex-col gap-2 bg-center p-5 h-full">
             <div className='flex flex-row items-center'>
@@ -24,12 +33,37 @@ export const MonthlyScreen = ({
             </div>
             <MasonryLayout>
                 <DatePicker value={date} onChange={setDate} />
+                <GlassCard>
+                    <div className="flex flex-row justify-between">
+                        <div className='flex flex-col justify-center'>
+                            <h3 className="text-xl font-semibold text-theme-onsurface">Activities</h3>
+                            <p className="text-lg font-medium text-theme-onsurface">{taskList.length} Task</p>
+                            <h4 className="text-sm font-light text-theme-onsurface tracking-wide">{date.toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: 'long',
+                                year: 'numeric'
+                            })}</h4>
+                        </div>
+                        <CircularProgress progress={progress} />
+                    </div>
+                </GlassCard>
                 {taskList.map(task =>
                     <TaskItem
                         task={task}
+                        toogleTaskDone={toogleTaskDone}
+                        onClick={() => {
+                            setTask(task)
+                            setModalOpen(true)
+                        }}
                     />
                 )}
             </MasonryLayout>
+
+            <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+                <TaskDetail
+                    task={task}
+                />
+            </Modal>
         </div>
     )
 }

@@ -130,7 +130,7 @@ export const TaskDetail = ({
                 >
                     Save
                 </button>}
-                {onDeleteTask && <button
+                {task && onDeleteTask && <button
                     aria-label="Delete"
                     className="p-2 rounded-full bg-red-500 onClick"
                     onClick={() => {
