@@ -9,7 +9,7 @@ export const TaskDetail = ({
     onDeleteTask = null,
 }) => {
     const [name, setName] = useState('')
-    const [descriptions, setDescriptions] = useState('')
+    const [description, setdescription] = useState('')
     const [dueDate, setDueDate] = useState(new Date())
     const [timeValue, setTimeValue] = useState("00:00")
     const [showDatePicker, setShowDatePicker] = useState(false)
@@ -22,13 +22,13 @@ export const TaskDetail = ({
             const hours = taskDate.getHours().toString().padStart(2, '0')
             const minutes = taskDate.getMinutes().toString().padStart(2, '0')
             setName(task.name)
-            setDescriptions(task.descriptions)
+            setdescription(task.description)
             setDueDate(taskDate)
             setTimeValue(`${hours}:${minutes}`)
             setPriority(task.priority)
         } else {
             setName('')
-            setDescriptions('')
+            setdescription('')
             setDueDate(new Date())
             setTimeValue("00:00")
             setPriority('low')
@@ -96,12 +96,12 @@ export const TaskDetail = ({
                 </div>
             </div>
 
-            <h3 className="text-xl font-bold mb-4 text-theme-onsurface">Descriptions</h3>
+            <h3 className="text-xl font-bold mb-4 text-theme-onsurface">description</h3>
             <AutoResizeTextarea
                 className="text-medium font-medium text-theme-onsurface p-2 rounded-xl border-2 border-[#B13BFF]/50 w-full transition duration-600 ease-in-out"
-                value={descriptions}
-                onChange={e => setDescriptions(e.target.value)}
-                placeholder="Task Descriptions"
+                value={description}
+                onChange={e => setdescription(e.target.value)}
+                placeholder="Task description"
                 disabled={onSaveTask == null}
             />
 
@@ -122,7 +122,7 @@ export const TaskDetail = ({
                         onSaveTask({
                             id: task?.id,
                             name,
-                            descriptions,
+                            description,
                             due: dueISO,
                             priority
                         })

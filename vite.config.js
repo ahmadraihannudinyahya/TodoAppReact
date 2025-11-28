@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
-   plugins: [
+  plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -41,45 +41,16 @@ export default defineConfig({
       },
 
       workbox: {
-        navigateFallback: '/index.html',
-
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-
         runtimeCaching: [
-          // Cache all GET API requests (e.g., GraphQL GET or REST endpoints)
           {
-            urlPattern: /\/api\/.*$/,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'api-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 // 24h
-              }
-            }
-          },
-
-          // Cache remote images, avatars, etc
-          {
-            urlPattern: /^https:\/\/.*\.(png|jpg|jpeg|svg|gif)$/,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'image-cache',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
-              }
-            }
+            urlPattern: ({ url }) => url.pathname.startsWith("/graphql"),
+            handler: "NetworkOnly",
+            method: "POST"
           }
         ]
       },
-
-      devOptions: {
-        enabled: true,          // Enable PWA in dev mode
-        type: 'module'
-      }
     })
-  ], 
+  ],
   server: {
     port: 4000,
     open: true,

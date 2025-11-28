@@ -11,7 +11,7 @@ export const ProjectItem = ({
         >
             <div className='flex flex-col gap-2'>
                 <h3 className="text-xl font-semibold text-theme-onsurface">{project.name}</h3>
-                <p className="text-lg font-light text-theme-onsurface mb-4">{project.descriptions}</p>
+                <p className="text-lg font-light text-theme-onsurface mb-4">{project.description}</p>
                 <HorizontalProgress
                     progress={project.progress}
                 />

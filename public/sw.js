@@ -1,45 +1,39 @@
-self.addEventListener('install', () => {
-  console.log('[SW] Installed');
+self.jwtToken = null;
+
+self.addEventListener("install", (event) => {
+    console.log("[SW] Install");
+    self.skipWaiting();
 });
 
-self.addEventListener('activate', () => {
-  console.log('[SW] Activated');
-  self.clients.claim();
+self.addEventListener("activate", (event) => {
+    console.log("[SW] Activate");
+    clients.claim();
 });
 
-// Handle GraphQL POST offline fallback
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
+importScripts("/syncmanager/idb-pending.js");
+importScripts("/syncmanager/graphql-client.js");
+importScripts("/syncmanager/sync-manager.js");
 
-  // Only intercept GraphQL POST
-  if (req.method === 'POST' && req.url.includes('/graphql')) {
-    event.respondWith(
-      (async () => {
-        try {
-          // Try normal network fetch
-          return await fetch(req.clone());
-        } catch {
-          // Offline fallback
-          return new Response(
-            JSON.stringify({ errors: [{ message: 'offline' }] }),
-            { status: 503, headers: { 'Content-Type': 'application/json' } }
-          );
-        }
-      })()
-    );
-  }
+self.addEventListener("PERIODIC_SYNC", (event) => {
+    if (event.tag === "SYNC_PENDING_DATA") {
+        console.log("[SW] Sync triggered");
+        event.waitUntil(runSyncManager());
+    }
 });
 
-// BACKGROUND SYNC
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-outbox') {
-    event.waitUntil(
-      (async () => {
-        const clientsList = await self.clients.matchAll();
-        clientsList.forEach((client) =>
-          client.postMessage({ type: 'SYNC_OUTBOX' })
-        );
-      })()
-    );
-  }
+self.addEventListener("message", (event) => {
+    if (event.data && event.data.type === 'SET_JWT_TOKEN' && event.data.token) {
+        self.jwtToken = event.data.token;
+        console.log("[SW] Token JWT berhasil diterima dan disimpan.");
+    }
+
+    if (event.data && event.data.type === "FORCE_SYNC") {
+        console.log("[SW] Force sync triggered from client");
+        runSyncManager();
+    }
+
+    if (event.data && event.data.type === 'CLEAR_JWT_TOKEN') {
+        jwtToken = null;
+        console.log("[SW] Token JWT dihapus (logout).");
+    }
 });

@@ -14,15 +14,15 @@ export const ProjectDetail = ({
 }) => {
     const [isEdit, setIsEdit] = useState(false)
     const [name, setName] = useState('')
-    const [descriptions, setDescriptions] = useState('')
+    const [description, setdescription] = useState('')
 
     const resetState = () => {
         if (project) {
             setName(project.name)
-            setDescriptions(project.descriptions)
+            setdescription(project.description)
         } else {
             setName('')
-            setDescriptions('')
+            setdescription('')
         }
     }
 
@@ -31,7 +31,7 @@ export const ProjectDetail = ({
             setIsEdit(true)
         } else {
             setName(project.name)
-            setDescriptions(project.descriptions)
+            setdescription(project.description)
             setIsEdit(false)
         }
     }, [project])
@@ -57,15 +57,15 @@ export const ProjectDetail = ({
                 </div>
                 <h3
                     className="text-bold font-medium text-theme-onsurface"
-                >Descriptions</h3>
+                >description</h3>
                 <AutoResizeTextarea
                     className={`text-medium font-medium text-theme-onsurface p-2 rounded-xl mb-4 ${isEdit ? 'border-2 border-[#B13BFF]/50' : ''} transition duration-600 ease-in-out`}
                     disabled={!isEdit}
-                    value={descriptions}
+                    value={description}
                     onChange={e => {
-                        setDescriptions(e.target.value)
+                        setdescription(e.target.value)
                     }}
-                    placeholder="Project Descriptions"
+                    placeholder="Project description"
                 />
                 <HorizontalProgress
                     progress={progress}
@@ -80,7 +80,7 @@ export const ProjectDetail = ({
                                     onProjectSave({
                                         id: project?.id,
                                         name: name,
-                                        descriptions: descriptions
+                                        description: description
                                     })
                                     setIsEdit(false)
                                 }}

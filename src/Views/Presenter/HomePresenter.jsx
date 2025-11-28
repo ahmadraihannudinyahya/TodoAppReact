@@ -23,7 +23,7 @@ export const HomePresenter = () => {
             const projectTaskDone = projectTask.filter(task => task.isDone);
             return {
                 ...project,
-                progress: projectTaskDone.length / projectTask.length * 100,
+                progress:projectTask.length ? projectTaskDone.length / projectTask.length * 100 : 0,
             }
         })
     }

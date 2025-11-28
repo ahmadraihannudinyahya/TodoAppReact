@@ -62,7 +62,7 @@ export const HomeScreen = ({
                     onClick={() => navigate('/monthly')}
                 />
             </MasonryLayout>
-            {projectList.length && <h1 className="text-2xl font-bold text-theme-onbackground">Manage Projects</h1>}
+            {projectList.length > 0 && <h1 className="text-2xl font-bold text-theme-onbackground">Manage Projects</h1>}
 
             <MasonryLayout>
                 {projectList.map(project =>
@@ -73,7 +73,7 @@ export const HomeScreen = ({
                 )}
             </MasonryLayout>
 
-            {taskList.length && <h1 className="text-2xl font-bold text-theme-onbackground">High Priority Task</h1>}
+            {taskList.length > 0 && <h1 className="text-2xl font-bold text-theme-onbackground">High Priority Task</h1>}
 
 
             <MasonryLayout>

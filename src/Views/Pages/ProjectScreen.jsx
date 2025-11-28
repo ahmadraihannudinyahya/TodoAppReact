@@ -67,6 +67,7 @@ export const ProjectScreen = ({
                     }}
                     onDeleteTask={(task) => {
                         onDeleteTask(task)
+                        setTask(null)
                         setModalOpen(false)
                     }}
                 />
